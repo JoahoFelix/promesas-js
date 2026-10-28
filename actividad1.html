@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+
+  form {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+  }
+
+  div {
+    margin-bottom: 12px;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 8px 15px;
+    background-color: #4334e6;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  label {
+    display: block;
+  }
+</style>
+
+
+  <form action="" id="formBuscador">
+    <div>
+      <input type="text" id="idplaneta" placeholder="Ejem. 1">
+      <button type="submit">Buscar</button>
+    </div>
+    
+    <div>
+      <label for="nombre">Nombre Planeta</label>
+      <input type="text" id="nombre">
+    </div>
+
+    <div>
+      <label for="clima">Clima</label>
+      <input type="text" id="clima">
+    </div>
+
+    <div>
+      <label for="gravedad">Gravedad</label>
+      <input type="text" id="gravedad">
+    </div>
+
+    <div>
+      <label for="terreno">Terreno</label>
+      <input type="text" id="terreno">
+    </div>
+
+     <div>
+      <label for="poblacion">Población</label>
+      <input type="text" id="poblacion">
+    </div>
+  </form>
+  <script>
+   
+
+    const formulario = document.getElementById('formBuscador')
+    const id = document.getElementById('idplaneta')
+    const nombre = document.getElementById('nombre')
+    const clima = document.getElementById('clima')
+    const gravedad = document.getElementById('gravedad')
+    const terreno = document.getElementById('terreno')
+    const poblacion = document.getElementById('poblacion')
+
+
+    formulario.addEventListener("submit", (event) => {
+      event.preventDefault() 
+      
+      obtenerPlanetas(id.value)
+    })
+
+
+
+    async function obtenerPlanetas(id){
+    const API_URL = `https://swapi.dev/api/planets/${id}`
+      try{
+        const respuesta = await fetch(API_URL)
+        if(!respuesta.ok) {
+       if(respuesta.status == 404){
+        nombre.value = ''
+        clima.value = ''
+        gravedad.value = ''
+        terreno.value  = ''
+        poblacion.value = ''
+        alert('No existe este planeta')
+       }
+       throw new Error(`Error de comunicacion`)
+      }
+        const datos = await respuesta.json()
+        
+       
+        nombre.value = datos.name
+        clima.value = datos.climate
+        gravedad.value = datos.gravity
+        terreno.value = datos.terrain
+        poblacion.value = datos.population
+
+      }catch(e){
+        console.error(e)
+      }
+      
+    }
+    
+  </script>
+
+</body>
+</html>
